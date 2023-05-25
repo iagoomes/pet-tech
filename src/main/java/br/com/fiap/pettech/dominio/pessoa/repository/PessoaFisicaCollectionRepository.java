@@ -15,6 +15,7 @@ public class PessoaFisicaCollectionRepository {
     static private Set<PessoaFisica> pessoas;
 
     static {
+
         pessoas = new LinkedHashSet<>();
 
         PessoaFisica p1 = new PessoaFisica();
@@ -24,6 +25,10 @@ public class PessoaFisicaCollectionRepository {
         dep1.setCpf("132154354").setNome("Bruno Sudré do Nascimento").setNascimento(LocalDate.of(2000, 5, 15));
 
         p1.addDependente(dep1);
+
+        save(p1);
+
+        save(dep1);
     }
 
     public Collection<PessoaFisica> findAll() {
@@ -34,6 +39,11 @@ public class PessoaFisicaCollectionRepository {
         return pessoas.stream().filter(p -> p.getId().equals(id)).findFirst();
     }
 
+    public static PessoaFisica save(PessoaFisica p) {
+        p.setId(pessoas.size() + 1L);
+        pessoas.add(p);
+        return p;
+    }
 
 
 }
