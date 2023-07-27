@@ -12,7 +12,7 @@ import java.util.Set;
 @Repository
 public class PessoaFisicaCollectionRepository {
 
-    static private Set<PessoaFisica> pessoas;
+    static final private Set<PessoaFisica> pessoas;
 
     static {
 
@@ -45,5 +45,20 @@ public class PessoaFisicaCollectionRepository {
         return p;
     }
 
+    public Optional<PessoaFisica> update(PessoaFisica pessoaFisica) {
+        Optional<PessoaFisica> pessoaFisicaOptional = this.findById(pessoaFisica.getId());
 
+        if (pessoaFisicaOptional.isPresent()){
+            PessoaFisica pessoa = pessoaFisicaOptional.get();
+            pessoa.setCpf(pessoaFisica.getCpf());
+            pessoa.setNome(pessoaFisica.getNome());
+            pessoa.setNascimento(pessoaFisica.getNascimento());
+        }
+
+        return Optional.empty();
+    }
+
+    public void delete(Long id) {
+        pessoas.removeIf(p -> p.getId().equals(id));
+    }
 }
