@@ -15,6 +15,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("produtos")
 public class ProdutoController {
+
     @Autowired
     private ProdutoService service;
 
@@ -38,8 +39,8 @@ public class ProdutoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Optional<Produto>> update(@PathVariable UUID id, @RequestBody Produto produto){
-        Optional<Produto> produtoUpdate = service.update(id, produto);
+    public ResponseEntity<Produto> update(@PathVariable UUID id, @RequestBody Produto produto) {
+        Produto produtoUpdate = service.update(id, produto);
         return ResponseEntity.ok(produtoUpdate);
     }
 
