@@ -1,5 +1,6 @@
 package br.com.fiap.pettech.dominio.produto.service;
 
+import br.com.fiap.pettech.dominio.produto.dto.ProdutoDto;
 import br.com.fiap.pettech.dominio.produto.entity.Produto;
 import br.com.fiap.pettech.dominio.produto.repository.ProdutoRepository;
 import br.com.fiap.pettech.dominio.produto.service.exception.ControllerNotFoundException;
@@ -8,9 +9,10 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.UUID;
 
 @Service
@@ -19,27 +21,35 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository repository;
 
-    public Collection<Produto> findAll() {
-        return repository.findAll();
+    public Page<ProdutoDto> findAll(PageRequest pagina) {
+        return repository.findAll(pagina).map(ProdutoDto::new);
     }
 
-    public Produto findById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ControllerNotFoundException("Produto não encontrado"));
+    public ProdutoDto findById(UUID id) {
+        Produto produto = repository.findById(id).orElseThrow(() -> new ControllerNotFoundException("Produto não encontrado"));
+        return new ProdutoDto(produto);
     }
 
-    public Produto save(Produto produto) {
-        return repository.save(produto);
+    public ProdutoDto save(ProdutoDto dto) {
+        Produto produto = new Produto();
+        produto.setNome(dto.getNome());
+        produto.setDescricao(dto.getDescricao());
+        produto.setUrlImagem(dto.getUrlImagem());
+        produto.setPreco(dto.getPreco());
+
+        var produtoSaved = repository.save(produto);
+        return new ProdutoDto(produtoSaved);
     }
 
-    public Produto update(UUID id, Produto produto) {
+    public ProdutoDto update(UUID id, ProdutoDto dto) {
         try {
-            Produto buscaProduto = repository.getOne(id);
-            buscaProduto.setNome(produto.getNome());
-            buscaProduto.setDescricao(produto.getDescricao());
-            buscaProduto.setUrlImagem(produto.getUrlImagem());
-            buscaProduto.setPreco(produto.getPreco());
+            Produto buscaProduto = repository.getReferenceById(id);
+            buscaProduto.setNome(dto.getNome());
+            buscaProduto.setDescricao(dto.getDescricao());
+            buscaProduto.setUrlImagem(dto.getUrlImagem());
+            buscaProduto.setPreco(dto.getPreco());
             buscaProduto = repository.save(buscaProduto);
-            return buscaProduto;
+            return new ProdutoDto(buscaProduto);
         } catch (EntityNotFoundException ex) {
             throw new ControllerNotFoundException("Produto não encontrado, id:" + id);
         }
