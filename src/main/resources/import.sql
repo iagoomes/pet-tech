@@ -1,0 +1,5 @@
+INSERT INTO tb_produto (id, nome, descricao, url_imagem, preco) VALUES ('ffdc054e-92ca-4994-91bc-e98fb91d8cee', 'Bolinha para cães', 'Divertida', 'URL 1', 55.99);
+INSERT INTO tb_produto (id, nome, descricao, url_imagem, preco) VALUES ('677e1376-70ac-4a87-8903-a541ae439df4', 'Bolinha', 'Divertida', 'URL 2', 53.99);
+INSERT INTO tb_produto (id, nome, descricao, url_imagem, preco) VALUES ('1790faa6-70b7-42d5-8377-836d1c6f538e', 'Pelucia para cães', 'Divertida', 'URL 3', 58.99);
+INSERT INTO tb_produto (id, nome, descricao, url_imagem, preco) VALUES ('8614b6f5-47e3-4a3c-b711-27d61d02c3d2', 'Casinha para cães', 'Divertida', 'URL 4', 59.99);
+INSERT INTO tb_produto (id, nome, descricao, url_imagem, preco) VALUES ('d0cd0e21-fc79-4502-b3d6-7260c3f5e194', 'Racao para cães', 'Divertida', 'URL 5', 70.99);
