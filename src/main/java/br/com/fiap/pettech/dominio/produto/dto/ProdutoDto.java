@@ -1,15 +1,19 @@
 package br.com.fiap.pettech.dominio.produto.dto;
 
 import br.com.fiap.pettech.dominio.produto.entity.Produto;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 public class ProdutoDto {
     private UUID id;
+    @NotBlank(message = "Nome é um campo obrigatório")
     private String nome;
     private String descricao;
     private String urlImagem;
+    @Positive(message = "Preço deve ser positivo")
     private BigDecimal preco;
 
     public ProdutoDto() {

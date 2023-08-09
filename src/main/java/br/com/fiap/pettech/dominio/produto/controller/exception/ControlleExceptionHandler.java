@@ -6,6 +6,8 @@ import br.com.fiap.pettech.dominio.produto.service.exception.DefaultError;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -13,7 +15,8 @@ import java.time.Instant;
 
 @ControllerAdvice
 public class ControlleExceptionHandler {
-    private DefaultError error = new DefaultError();
+    private final DefaultError error = new DefaultError();
+
     @ExceptionHandler(ControllerNotFoundException.class)
     public ResponseEntity<DefaultError> entityNotFound(ControllerNotFoundException exception, HttpServletRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
@@ -34,5 +37,22 @@ public class ControlleExceptionHandler {
         error.setMessage(exception.getMessage());
         error.setPath(request.getRequestURI());
         return ResponseEntity.status(status).body(this.error);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidacaoForm> validation(MethodArgumentNotValidException exception, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ValidacaoForm validacaoForm = new ValidacaoForm();
+        validacaoForm.setTimeStamp(Instant.now());
+        validacaoForm.setStatus(status.value());
+        validacaoForm.setError("Database error");
+        validacaoForm.setMessage("Erro na validação do DTO");
+        validacaoForm.setPath(request.getRequestURI());
+
+        for (FieldError field : exception.getBindingResult().getFieldErrors()) {
+            validacaoForm.addMenssagens(field.getField(), field.getDefaultMessage());
+        }
+
+        return ResponseEntity.status(status).body(validacaoForm);
     }
 }

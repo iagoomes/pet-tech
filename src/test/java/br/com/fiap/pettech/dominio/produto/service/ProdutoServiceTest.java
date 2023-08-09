@@ -28,7 +28,6 @@ public class ProdutoServiceTest {
     private ProdutoService service;
     @Mock
     private ProdutoRepository repository;
-
     private UUID idExistente;
     private UUID idNaoExistente;
     private PageRequest pageRequest;
@@ -36,7 +35,6 @@ public class ProdutoServiceTest {
     private ProdutoDto produtoDto;
     private Produto produto;
     private String nomeAtualizado;
-
     @BeforeEach
     void setUp() throws Exception {
         idExistente = UUID.fromString("677e1376-70ac-4a87-8903-a541ae439df4");
